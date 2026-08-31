@@ -1,0 +1,39 @@
+---
+import type {
+  BlockComponentType,
+  BlockData,
+} from "../../types/components-types/block_data";
+import Hero from "./Hero.astro";
+import SectionHeading from "./SectionHeading.astro";
+import CardGrid from "./CardsGrid.astro";
+import ContentWithImage from "./ContentWithImage.astro";
+import Faqs from "./Faqs.astro";
+import PersonCard from "./PersonCard.astro";
+import Markdown from "./Markdown.astro";
+import FeaturedArticles from "./FeaturedArticles.astro";
+import Newsletter from "./Newsletter.astro";
+
+const componentMap: Record<BlockComponentType, any> = {
+  "blocks.hero": Hero,
+  "blocks.section-heading": SectionHeading,
+  "blocks.card-grid": CardGrid,
+  "blocks.content-with-image": ContentWithImage,
+  "blocks.faqs": Faqs,
+  "blocks.person-card": PersonCard,
+  "blocks.markdown": Markdown,
+  "blocks.featured-articles": FeaturedArticles,
+  "blocks.newsletter": Newsletter,
+};
+
+const { blocks } = Astro.props;
+---
+
+<div class="block-renderer">
+  {
+    blocks.map((block: BlockData) => {
+      // console.log(block, "block.data");
+      const Component = componentMap[block.__component];
+      return Component ? <Component data={block} /> : null;
+    })
+  }
+</div>

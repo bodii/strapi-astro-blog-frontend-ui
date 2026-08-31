@@ -1,0 +1,37 @@
+---
+import StrapiImage from "../StrapiImage.astro";
+import type { SliderProps } from "../../types/components-types/shared_data";
+import type { Image } from "../../types/media";
+
+interface Props {
+    data: SliderProps;
+}
+
+const { data } = Astro.props;
+const images = (data.files || []) as Image[];
+---
+
+<div class="overflow-x-auto">
+    <div class="flex gap-4 pb-2">
+        {
+            images.map((item) => {
+                const imageUrl = item.url;
+                const altText = item.alternativeText || "Slide image";
+                const width = item.width || 800;
+                const height = item.height || 500;
+
+                return imageUrl ? (
+                    <div class="min-w-65 flex-1 overflow-hidden rounded-card border border-border bg-surface-raised">
+                        <StrapiImage
+                            src={imageUrl}
+                            alt={altText}
+                            height={height}
+                            width={width}
+                            class="h-52 w-full object-cover"
+                        />
+                    </div>
+                ) : null;
+            })
+        }
+    </div>
+</div>

@@ -1,0 +1,29 @@
+---
+import type { CardGridProps } from "../../types/components-types/block_data";
+
+interface Props {
+  data: CardGridProps;
+}
+
+const {
+  data: { cards },
+} = Astro.props;
+---
+
+<section>
+  <div class="mx-auto max-w-6xl px-6 py-16">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        cards &&
+          cards.map((card) => (
+            <div class="group rounded-card border border-border bg-surface-raised p-6 transition hover:shadow-md hover:border-border-hover">
+              <h4 class="text-lg font-semibold text-secondary group-hover:text-primary-600 transition font-heading">
+                {card.heading}
+              </h4>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{card.text}</p>
+            </div>
+          ))
+      }
+    </div>
+  </div>
+</section>

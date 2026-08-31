@@ -1,0 +1,16 @@
+---
+import { marked } from "marked";
+import type { RichTextProps } from "../../types/components-types/shared_data";
+
+interface Props {
+    data: RichTextProps;
+}
+
+const { data } = Astro.props;
+const html = marked(data.text || data.body || "");
+---
+
+<article
+    class="prose prose-lg max-w-none text-muted prose-headings:font-heading prose-headings:text-secondary prose-p:leading-8 prose-a:text-primary-700 prose-blockquote:border-primary-500 prose-blockquote:bg-surface-alt prose-img:rounded-2xl"
+    set:html={html}
+/>

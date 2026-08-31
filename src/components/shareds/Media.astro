@@ -1,0 +1,26 @@
+---
+import StrapiImage from "../StrapiImage.astro";
+import type { MediaProps } from "../../types/components-types/shared_data";
+import type { Image } from "../../types/media";
+
+interface Props {
+    data: MediaProps;
+}
+
+const { data } = Astro.props;
+const file = data.file as Image | null;
+---
+
+{
+    file && file.url && (
+        <div class="overflow-hidden rounded-[28px] border border-border bg-surface-alt p-2 shadow-[0_20px_45px_rgba(15,23,42,0.06)]">
+            <StrapiImage
+                src={file.url}
+                alt={file.alternativeText || "Media image"}
+                height={file.height || 800}
+                width={file.width || 1200}
+                class="w-full rounded-[20px] object-cover"
+            />
+        </div>
+    )
+}

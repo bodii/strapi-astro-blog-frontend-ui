@@ -1,0 +1,172 @@
+---
+import { marked } from "marked";
+import type { MarkdownProps } from "../../types/components-types/block_data";
+interface Props {
+  data: MarkdownProps;
+}
+
+const {
+  data: { content },
+} = Astro.props;
+const html = marked(content);
+---
+
+<article class="prose mx-auto max-w-3xl px-6 mb-12" set:html={html} />
+
+<style is:global>
+  .prose {
+    color: var(--color-muted);
+    line-height: 1.75;
+    font-size: 1.125rem;
+  }
+
+  .prose h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1rem;
+    color: var(--color-secondary);
+    letter-spacing: -0.025em;
+  }
+  .prose h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    color: var(--color-secondary);
+    letter-spacing: -0.025em;
+  }
+  .prose h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.5rem;
+    color: var(--color-secondary);
+  }
+  .prose h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--color-secondary);
+  }
+  .prose h5,
+  .prose h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.25rem 0 0.5rem;
+    color: var(--color-secondary);
+  }
+
+  .prose p {
+    margin-bottom: 1.5rem;
+  }
+
+  .prose a {
+    color: var(--color-primary-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose a:hover {
+    color: var(--color-primary-700);
+  }
+
+  .prose strong {
+    font-weight: 600;
+    color: var(--color-secondary);
+  }
+  .prose em {
+    font-style: italic;
+  }
+  .prose del {
+    text-decoration: line-through;
+  }
+
+  .prose blockquote {
+    border-left: 3px solid var(--color-primary-500);
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background: var(--color-surface-alt);
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .prose ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+  .prose li > ul {
+    list-style-type: disc;
+    padding-left: 1.25rem;
+    margin: 0.5rem 0;
+  }
+  .prose li > ol {
+    list-style-type: decimal;
+    padding-left: 1.25rem;
+    margin: 0.5rem 0;
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 2.5rem 0;
+  }
+
+  .prose pre {
+    background: var(--color-secondary);
+    color: var(--color-surface);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .prose code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.875em;
+  }
+
+  .prose :not(pre) > code {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    padding: 0.125rem 0.375rem;
+    color: var(--color-secondary);
+  }
+
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+  }
+  .prose th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: var(--color-secondary);
+    border-bottom: 2px solid var(--color-border);
+  }
+  .prose td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .prose tr:hover td {
+    background: var(--color-surface-alt);
+  }
+
+  .prose img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin: 2rem 0;
+  }
+</style>

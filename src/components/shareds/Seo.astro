@@ -1,0 +1,19 @@
+---
+interface Props {
+    data: {
+        metaTitle?: string;
+        metaDescription?: string;
+    };
+}
+
+const { data } = Astro.props;
+---
+
+<div class="sr-only">
+    {data.metaTitle && <title>{data.metaTitle}</title>}
+    {
+        data.metaDescription && (
+            <meta name="description" content={data.metaDescription} />
+        )
+    }
+</div>

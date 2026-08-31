@@ -1,0 +1,22 @@
+---
+import type { LinkProps } from "../../types/components-types/shared_data";
+
+interface Props {
+  data: LinkProps;
+}
+
+const { data } = Astro.props;
+
+const classes = data.isButtonLink
+  ? "inline-flex items-center justify-center rounded-button bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-700"
+  : "inline-flex items-center text-sm font-medium text-primary-700 transition hover:text-primary-900";
+---
+
+<a
+  class={classes}
+  href={data.href}
+  target={data.isExternal ? "_blank" : "_self"}
+  rel={data.isExternal ? "noopener noreferrer" : undefined}
+>
+  {data.label}
+</a>

@@ -1,0 +1,20 @@
+---
+import Faq from "../Faq.astro";
+import type { FaqsProps } from "../../types/components-types/block_data";
+
+interface Props {
+  data: FaqsProps;
+}
+
+const {
+  data: { faqs },
+} = Astro.props;
+---
+
+<section>
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <ul class="space-y-3">
+      {faqs?.map((faq) => <Faq question={faq.heading} answer={faq.text} />)}
+    </ul>
+  </div>
+</section>

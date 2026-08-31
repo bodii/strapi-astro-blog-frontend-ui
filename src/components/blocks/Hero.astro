@@ -1,0 +1,66 @@
+---
+import type { HeroProps } from "../../types/components-types/block_data";
+import StrapiImage from "../StrapiImage.astro";
+
+interface Props {
+  data: HeroProps;
+}
+
+const {
+  data: { heading, text, image, links },
+} = Astro.props;
+---
+
+<section class="overflow-hidden bg-surface">
+  <div class="mx-auto max-w-6xl px-6 py-20 lg:py-28">
+    <div class="flex flex-col items-center gap-12 lg:flex-row lg:gap-16">
+      <div class="flex-1 text-center lg:text-left">
+        <h1
+          class="text-4xl font-bold tracking-tight text-secondary sm:text-5xl lg:text-6xl font-heading leading-[1.1]"
+        >
+          {heading}
+        </h1>
+        <p
+          class="mt-6 text-lg leading-relaxed text-muted max-w-lg mx-auto lg:mx-0"
+        >
+          {text}
+        </p>
+        {
+          links && (
+            <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+              {links.map((link) => {
+                const isPrimary = link.type === "PRIMARY";
+                return (
+                  <a
+                    class={`inline-flex items-center rounded-button px-5 py-2.5 text-sm font-semibold transition ${
+                      isPrimary
+                        ? "bg-primary-600 text-white shadow-sm hover:bg-primary-700"
+                        : "border border-border bg-surface-raised text-secondary hover:border-border-hover hover:bg-surface-alt"
+                    }`}
+                    href={link.href}
+                    target={link.isExternal ? "_blank" : "_self"}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
+            </div>
+          )
+        }
+      </div>
+      {
+        image && (
+          <div class="flex-1">
+            <StrapiImage
+              src={image.file.url}
+              alt={image.file.alternativeText}
+              height={600}
+              width={800}
+              class="w-full rounded-2xl object-cover shadow-lg"
+            />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../../layouts/Layout.astro";
+import { getAboutPageData } from "../../services/about_page_service";
+import SharedRenderer from "../../components/shareds/sharedRenderer.astro";
+
+const data = await getAboutPageData();
+const aboutPage = data?.data;
+
+if (!aboutPage) throw new Error("About page not found");
+---
+
+<BaseLayout>
+  <div class="mx-auto max-w-6xl px-6 py-12 sm:py-16 lg:py-20">
+    <header
+      class="relative overflow-hidden rounded-[28px] border border-border bg-gradient-to-br from-primary-50 via-white to-surface-alt px-6 py-10 shadow-[0_18px_45px_rgba(15,23,42,0.04)] sm:px-8 lg:px-12"
+    >
+      <div
+        class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700"
+      >
+      </div>
+      <div class="relative max-w-3xl">
+        <span
+          class="inline-flex items-center rounded-full border border-primary-200 bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary-700"
+        >
+          About
+        </span>
+        <h1
+          class="mt-5 font-heading text-4xl font-bold tracking-tight text-secondary sm:text-5xl lg:text-6xl"
+        >
+          {aboutPage.title}
+        </h1>
+      </div>
+    </header>
+
+    <div class="mt-10 space-y-10 lg:mt-14 lg:space-y-16">
+      <SharedRenderer blocks={aboutPage.blocks ?? []} />
+    </div>
+  </div>
+</BaseLayout>

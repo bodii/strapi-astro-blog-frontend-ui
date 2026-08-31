@@ -1,0 +1,59 @@
+---
+import type {
+  SharedComponentType,
+  SharedData,
+} from "../../types/components-types/shared_data";
+import Link from "./Link.astro";
+import Card from "./Card.astro";
+import LogoLink from "./LogoLink.astro";
+import Media from "./Media.astro";
+import Quote from "./Quote.astro";
+import RichText from "./RichText.astro";
+import Seo from "./Seo.astro";
+import Slider from "./Slider.astro";
+
+const componentMap: Record<SharedComponentType, any> = {
+  "shared.link": Link,
+  "shared.card": Card,
+  "shared.logo-link": LogoLink,
+  "shared.media": Media,
+  "shared.quote": Quote,
+  "shared.rich-text": RichText,
+  "shared.seo": Seo,
+  "shared.slider": Slider,
+};
+
+const blocks = Array.isArray(Astro.props.blocks)
+  ? Astro.props.blocks
+  : Array.isArray(Astro.props.shareds)
+    ? Astro.props.shareds
+    : [];
+
+const getBlockWrapper = (componentName: SharedComponentType) => {
+  switch (componentName) {
+    case "shared.quote":
+      return "mx-auto w-full max-w-4xl";
+    case "shared.rich-text":
+      return "mx-auto w-full max-w-3xl";
+    case "shared.media":
+      return "mx-auto w-full max-w-5xl";
+    default:
+      return "w-full";
+  }
+};
+---
+
+<div class="shared-renderer space-y-10 lg:space-y-14">
+  {
+    blocks.map((shared: SharedData) => {
+      const Component = componentMap[shared.__component as SharedComponentType];
+      if (!Component) return null;
+
+      return (
+        <div class={getBlockWrapper(shared.__component as SharedComponentType)}>
+          <Component data={shared} />
+        </div>
+      );
+    })
+  }
+</div>

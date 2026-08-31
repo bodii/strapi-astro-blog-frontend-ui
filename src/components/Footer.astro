@@ -1,0 +1,80 @@
+---
+import type { Footer } from "../types/components-types/layout";
+import StrapiImage from "./StrapiImage.astro";
+
+interface Props {
+    data: Footer;
+}
+
+const {
+    data: { logo, navItems, socialLinks, copyrightText },
+} = Astro.props;
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-border bg-surface-alt">
+    <div class="mx-auto max-w-6xl px-6 py-16">
+        <div
+            class="flex flex-col gap-10 md:flex-row md:items-center md:justify-between"
+        >
+            <a
+                class="flex items-center gap-2 font-heading text-lg font-bold w-12 h-12 max-w-18"
+                href={logo.href}
+            >
+                <StrapiImage
+                    src={logo.image?.url ?? ""}
+                    alt={logo.image?.alternativeText}
+                    height={12}
+                    width={12}
+                    class="rounded-lg"
+                />
+            </a>
+            <nav>
+                <ul class="flex flex-wrap gap-x-6 gap-y-2">
+                    {
+                        navItems &&
+                            navItems.map((item) => (
+                                <li>
+                                    <a
+                                        class="text-sm text-muted hover:text-secondary transition"
+                                        href={item.href}
+                                    >
+                                        {item.label}
+                                    </a>
+                                </li>
+                            ))
+                    }
+                </ul>
+            </nav>
+        </div>
+
+        <div
+            class="mt-10 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between"
+        >
+            <p class="text-sm text-faint">
+                &copy; {currentYear}. {copyrightText}
+            </p>
+            {
+                socialLinks && (
+                    <div class="flex gap-2">
+                        {socialLinks.map((item) => (
+                            <a
+                                class="rounded-lg p-2 text-muted hover:bg-surface-raised hover:text-secondary transition w-12 h-12 max-w-12"
+                                href={item.href}
+                                aria-label={item.label}
+                            >
+                                <StrapiImage
+                                    src={item.image?.url ?? ""}
+                                    alt={item.image?.alternativeText}
+                                    height={18}
+                                    width={18}
+                                />
+                            </a>
+                        ))}
+                    </div>
+                )
+            }
+        </div>
+    </div>
+</footer>

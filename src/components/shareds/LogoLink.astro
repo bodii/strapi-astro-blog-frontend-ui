@@ -1,0 +1,30 @@
+---
+import StrapiImage from "../StrapiImage.astro";
+import type { LogoLinkProps } from "../../types/components-types/shared_data";
+
+interface Props {
+    data: LogoLinkProps;
+}
+
+const { data } = Astro.props;
+---
+
+<a
+    class="inline-flex items-center gap-3 text-secondary transition hover:text-primary-700"
+    href={data.href}
+    target={data.isExternal ? "_blank" : "_self"}
+    rel={data.isExternal ? "noopener noreferrer" : undefined}
+>
+    {
+        data.image && (
+            <StrapiImage
+                src={data.image.url}
+                alt={data.image.alternativeText || data.label}
+                height={40}
+                width={40}
+                class="h-10 w-10 rounded-full object-cover"
+            />
+        )
+    }
+    <span class="font-semibold">{data.label}</span>
+</a>

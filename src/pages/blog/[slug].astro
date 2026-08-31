@@ -1,0 +1,97 @@
+---
+import BaseLayout from "../../layouts/Layout.astro";
+import StrapiImage from "../../components/StrapiImage.astro";
+import SharedRenderer from "../../components/shareds/sharedRenderer.astro";
+import { formatDate } from "../../utils/index";
+import type { Article } from "../../types/collection-types/articles";
+import {
+  getBlogDetailPageData,
+  getAllArticleSlugs,
+} from "../../services/blog_page_service";
+
+export const prerender = false; // 该页面采用 SSR
+const { slug } = Astro.params;
+if (!slug) {
+  throw new Error("Slug is required");
+}
+
+const articlesData = await getBlogDetailPageData(slug);
+if (!articlesData || !articlesData.data || articlesData.data.length === 0) {
+  throw new Error("Article not found");
+}
+
+const articleDetail = articlesData.data[0] as Article;
+---
+
+<BaseLayout>
+  <article class="mx-auto max-w-6xl px-6 py-12 sm:py-16 lg:py-20">
+    <header class="mx-auto max-w-4xl">
+      <div
+        class="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-primary-600"
+      >
+        {
+          articleDetail.category?.name && (
+            <span class="rounded-full border border-primary-200 bg-primary-50 px-3 py-1.5">
+              {articleDetail.category.name}
+            </span>
+          )
+        }
+        <time class="text-muted">{formatDate(articleDetail.publishedAt)}</time>
+      </div>
+
+      <h1
+        class="mt-5 font-heading text-4xl font-bold tracking-tight text-secondary sm:text-5xl lg:text-6xl"
+      >
+        {articleDetail.title}
+      </h1>
+
+      <div class="mt-6 flex items-center gap-4 border-y border-border py-4">
+        {
+          articleDetail.author?.avatar && (
+            <StrapiImage
+              src={articleDetail.author.avatar.url}
+              alt={
+                articleDetail.author.avatar.alternativeText ||
+                articleDetail.author.name
+              }
+              height={48}
+              width={48}
+              class="h-12 w-12 rounded-full object-cover"
+            />
+          )
+        }
+
+        <div>
+          <p class="text-sm font-semibold text-secondary">
+            {articleDetail.author?.name || "Editor"}
+          </p>
+          <p class="text-xs uppercase tracking-[0.12em] text-faint">Author</p>
+        </div>
+      </div>
+    </header>
+
+    {
+      articleDetail.cover && (
+        <div class="mt-10 overflow-hidden rounded-[28px] border border-border bg-surface-alt p-2 shadow-[0_22px_45px_rgba(15,23,42,0.06)]">
+          <StrapiImage
+            src={articleDetail.cover.url}
+            alt={articleDetail.cover.alternativeText || articleDetail.title}
+            height={articleDetail.cover.height || 900}
+            width={articleDetail.cover.width || 1400}
+            class="h-70 w-full rounded-[20px] object-cover sm:h-105 lg:h-130"
+          />
+        </div>
+      )
+    }
+
+    <div class="mx-auto mt-12 max-w-4xl">
+      <p class="text-lg leading-8 text-muted sm:text-xl">
+        {articleDetail.description}
+      </p>
+    </div>
+
+    <div class="mx-auto mt-12 max-w-5xl">
+      <SharedRenderer blocks={articleDetail.blocks ?? []} />
+    </div>
+  </article>
+</BaseLayout>

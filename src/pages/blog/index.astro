@@ -1,0 +1,226 @@
+---
+import BaseLayout from "../../layouts/Layout.astro";
+import StrapiImage from "../../components/StrapiImage.astro";
+import Pagination from "../../components/Pagination.astro";
+import type { Article } from "@/types/collection-types/articles";
+import { getBlogPageData } from "../../services/blog_page_service";
+import { formatDate } from "../../utils/index";
+
+const response = await getBlogPageData();
+const articles: Article[] = Array.isArray(response?.data) ? response.data : [];
+const pagination = response?.meta?.pagination ?? {
+    page: 1,
+    pageSize: 10,
+    pageCount: 1,
+    total: articles.length,
+};
+
+const featuredArticle = articles[0];
+const secondaryArticles = articles.slice(1);
+---
+
+<BaseLayout>
+    <section class="mx-auto max-w-6xl px-6 py-12 sm:py-16 lg:py-20">
+        <header
+            class="rounded-[28px] border border-border bg-linear-to-br from-primary-50 via-white to-surface-alt px-6 py-8 shadow-[0_18px_45px_rgba(15,23,42,0.04)] sm:px-10 lg:px-12"
+        >
+            <div class="max-w-2xl">
+                <p
+                    class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600"
+                >
+                    Journal
+                </p>
+                <h1
+                    class="mt-3 font-heading text-4xl font-bold tracking-tight text-secondary sm:text-5xl"
+                >
+                    Blog
+                </h1>
+                <p class="mt-4 text-base leading-7 text-muted">
+                    Insights, stories, and practical thinking from our team.
+                </p>
+            </div>
+        </header>
+
+        {
+            !articles.length && (
+                <div class="mt-12 rounded-2xl border border-dashed border-border bg-surface-alt p-10 text-center text-muted">
+                    No articles published yet.
+                </div>
+            )
+        }
+
+        {
+            featuredArticle && (
+                <article class="mt-12 overflow-hidden rounded-[28px] border border-border bg-surface-raised shadow-[0_20px_45px_rgba(15,23,42,0.05)]">
+                    <a
+                        href={`/blog/${featuredArticle.slug}`}
+                        class="group block"
+                    >
+                        <div class="overflow-hidden">
+                            <StrapiImage
+                                src={featuredArticle.cover?.url || ""}
+                                alt={
+                                    featuredArticle.cover?.alternativeText ||
+                                    featuredArticle.title
+                                }
+                                height={900}
+                                width={1400}
+                                class="h-80 w-full object-cover transition duration-500 group-hover:scale-[1.02] sm:h-105"
+                            />
+                        </div>
+
+                        <div class="p-6 sm:p-8 lg:p-10">
+                            <div class="flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-[0.12em] text-muted">
+                                {featuredArticle.category?.name && (
+                                    <span class="rounded-full bg-primary-50 px-2.5 py-1 text-primary-700">
+                                        {featuredArticle.category.name}
+                                    </span>
+                                )}
+                                <time>
+                                    {formatDate(featuredArticle.publishedAt)}
+                                </time>
+                            </div>
+
+                            <h2 class="mt-4 font-heading text-2xl font-bold text-secondary transition group-hover:text-primary-700 sm:text-3xl lg:text-4xl">
+                                {featuredArticle.title}
+                            </h2>
+
+                            <p class="mt-4 max-w-3xl text-base leading-7 text-muted sm:text-lg">
+                                {featuredArticle.description}
+                            </p>
+
+                            <div class="mt-6 flex items-center gap-3">
+                                {featuredArticle.author?.avatar && (
+                                    <StrapiImage
+                                        src={featuredArticle.author.avatar.url}
+                                        alt={
+                                            featuredArticle.author.avatar
+                                                .alternativeText ||
+                                            featuredArticle.author.name
+                                        }
+                                        height={40}
+                                        width={40}
+                                        class="h-10 w-10 rounded-full object-cover"
+                                    />
+                                )}
+
+                                <div>
+                                    <p class="text-sm font-semibold text-secondary">
+                                        {featuredArticle.author?.name ||
+                                            "Editor"}
+                                    </p>
+                                    <p class="text-xs text-faint">Author</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            )
+        }
+
+        {
+            secondaryArticles.length > 0 && (
+                <div class="mt-14">
+                    <div class="mb-6 flex items-center justify-between">
+                        <h2 class="font-heading text-2xl font-bold text-secondary sm:text-3xl">
+                            Latest articles
+                        </h2>
+                    </div>
+
+                    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {secondaryArticles.map((article) => (
+                            <article class="group overflow-hidden rounded-[22px] border border-border bg-surface-raised shadow-[0_16px_35px_rgba(15,23,42,0.03)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_45px_rgba(15,23,42,0.06)]">
+                                <a
+                                    href={`/blog/${article.slug}`}
+                                    class="block h-full"
+                                >
+                                    <div class="overflow-hidden">
+                                        <StrapiImage
+                                            src={article.cover?.url || ""}
+                                            alt={
+                                                article.cover
+                                                    ?.alternativeText ||
+                                                article.title
+                                            }
+                                            height={600}
+                                            width={800}
+                                            class="h-56 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                                        />
+                                    </div>
+
+                                    <div class="p-5">
+                                        <div class="flex items-center justify-between gap-3 text-[11px] font-medium uppercase tracking-[0.12em] text-muted">
+                                            {article.category?.name && (
+                                                <span>
+                                                    {article.category.name}
+                                                </span>
+                                            )}
+                                            <time>
+                                                {formatDate(
+                                                    article.publishedAt,
+                                                )}
+                                            </time>
+                                        </div>
+
+                                        <h3 class="mt-3 font-heading text-xl font-bold leading-snug text-secondary transition group-hover:text-primary-700">
+                                            {article.title}
+                                        </h3>
+
+                                        <p class="mt-3 line-clamp-3 text-sm leading-6 text-muted">
+                                            {article.description}
+                                        </p>
+
+                                        <div class="mt-5 flex items-center gap-3 border-t border-border pt-4">
+                                            {article.author?.avatar && (
+                                                <StrapiImage
+                                                    src={
+                                                        article.author.avatar
+                                                            .url
+                                                    }
+                                                    alt={
+                                                        article.author.avatar
+                                                            .alternativeText ||
+                                                        article.author.name
+                                                    }
+                                                    height={32}
+                                                    width={32}
+                                                    class="h-8 w-8 rounded-full object-cover"
+                                                />
+                                            )}
+
+                                            <span class="text-sm font-medium text-secondary">
+                                                {article.author?.name ||
+                                                    "Editor"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+
+        {
+            pagination.pageCount > 1 && (
+                <div class="mt-12">
+                    <Pagination
+                        previousPage={
+                            pagination.page > 1
+                                ? `/blog?page=${pagination.page - 1}`
+                                : null
+                        }
+                        nextPage={
+                            pagination.page < pagination.pageCount
+                                ? `/blog?page=${pagination.page + 1}`
+                                : null
+                        }
+                        currentPage={pagination.page}
+                        totalPages={pagination.pageCount}
+                    />
+                </div>
+            )
+        }
+    </section>
+</BaseLayout>
