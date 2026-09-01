@@ -8,14 +8,21 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "bun run build && wrangler dev",
+    "astro": "astro",
+    "generate-types": "wrangler types",
+    "deploy": "bun run build && wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.2.6",
     "@strapi/client": "^1.6.2",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.3",
+    "cloudflare": "^7.1.0",
     "marked": "^18.0.11",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.127.1"
   }
 }
