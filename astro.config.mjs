@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 import cloudflare from '@astrojs/cloudflare';
@@ -13,11 +13,5 @@ export default defineConfig({
       minify: false,
     },
   },
-  env: {
-    schema: {
-      STRAPI_BASE_URL: envField.string({ context: "server", access: "public", optional: true }),
-    }
-  },
-
   adapter: cloudflare(),
 });
